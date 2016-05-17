@@ -15,16 +15,20 @@ func (srv* Server) loginHandler(w http.ResponseWriter, r *http.Request) {
     q := r.URL.Query()
     username := q.Get("username")
     password := q.Get("password")
-    if len(username) < 3 || len(password) < 3 {
-        fmt.Fprintf(w, `{"login"": "failed"}`)
+    if len(username) < 1 {
+        fmt.Fprintf(w, `{"login": "failed", "reason": "No username specified"}`)
+        return
+    }
+    if len(password) < 1 {
+        fmt.Fprintf(w, `{"login": "failed", "reason": "No password specified"}`)
         return
     }
     
     loginOK := validLogin(username, password)
     if loginOK {
         
-        fmt.Fprintf(w, `{"login"": "ok"}`)
+        fmt.Fprintf(w, `{"login": "ok"}`)
         return
     }
-    fmt.Fprintf(w, `{"login"": "failed"}`)
+    fmt.Fprintf(w, `{"login": "failed", "reason": "Wrong credentials"}`)
 }

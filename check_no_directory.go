@@ -14,7 +14,7 @@ func checkNoDirectory(handler http.Handler) http.Handler {
 
 func isPath(s string) bool {
     last := s[len(s) - 1]
-    return last != '/' && last != '\\'
+    return last == '/' || last == '\\'
 }
 
 func (d *dircheck) ServeHTTP(w http.ResponseWriter, r *http.Request) {

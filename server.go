@@ -8,14 +8,15 @@ import (
 type Server struct {
     server *http.Server
     mux *http.ServeMux
-    path string
+    htmlpath string
+    datapath string
     sessions map[string]*session
     sessionsByUser map[string]*session
     sessionsLock sync.RWMutex
 }
 
-func New(server *http.Server, path string) (*Server, error) {
-    return createMediaServer(server, path)
+func New(server *http.Server, htmlpath, datapath string) (*Server, error) {
+    return createMediaServer(server, htmlpath, datapath)
 }
 
 func (srv *Server) ListenAndServeTLS(certFile, keyFile string) error {

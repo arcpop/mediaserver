@@ -16,7 +16,7 @@ func createMediaServer(server *http.Server, path string) (*Server, error) {
     }
     s.server.Handler = s.mux
     s.mux.HandleFunc("/", s.indexHandler)
-    s.mux.Handle("/static/", http.FileServer(http.Dir(path)))
+    s.mux.Handle("/static/", checkNoDirectory(http.FileServer(http.Dir(path))))
     s.mux.HandleFunc("/user/", s.checkSecure(s.userHandler))
     s.mux.HandleFunc("/shared/", s.checkSecure(s.sharedHandler))
     s.mux.HandleFunc("/login", s.loginHandler)

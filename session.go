@@ -47,7 +47,7 @@ func (srv *Server) checkSession(r *http.Request) (s *session, expired bool) {
     return
 }
 
-func (srv *Server) createSession(username, token string) (*session) {
+func (srv *Server) createSession(username string) (*session) {
     srv.sessionsLock.Lock()
     defer srv.sessionsLock.Unlock()
     
@@ -60,8 +60,8 @@ func (srv *Server) createSession(username, token string) (*session) {
     if err != nil {
         return nil
     }
-    sessionID := base64.StdEncoding.EncodeToString(data);
-    for ; srv.sessions[sessionID] != nil; sessionID = base64.StdEncoding.EncodeToString(data) {
+    sessionID := base64.RawStdEncoding.EncodeToString(data);
+    for ; srv.sessions[sessionID] != nil; sessionID = base64.RawStdEncoding.EncodeToString(data) {
         _, err := io.ReadFull(rand.Reader, data)
         if err != nil {
             return nil
@@ -69,7 +69,7 @@ func (srv *Server) createSession(username, token string) (*session) {
     }
     s = &session{
         username: username,
-        token: token,
+        token: "",
         validUntil: time.Now().Add(DefaultSessionTimeout),
         sessionID: sessionID,
     }

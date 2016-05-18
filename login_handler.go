@@ -6,8 +6,8 @@ import (
 )
 
 
-func validLogin(username, password string) bool {
-    return username == "test" && password == "test"
+func validLogin(username, password string) (bool, string) {
+    return (username == "test" && password == "test"), "test"
 }
 
 
@@ -24,10 +24,15 @@ func (srv* Server) loginHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
     
-    loginOK := validLogin(username, password)
+    loginOK, username := validLogin(username, password)
     if loginOK {
-        
-        fmt.Fprintf(w, `{"login": "ok"}`)
+        sess := srv.createSession(username)
+        http.SetCookie(w, &http.Cookie{
+            Name: "SID",
+            Value: sess.sessionID,
+            Expires: sess.validUntil,
+        })
+        fmt.Fprintf(w, `{"login": "ok", "username": "` + username + `" }`)
         return
     }
     fmt.Fprintf(w, `{"login": "failed", "reason": "Wrong credentials"}`)

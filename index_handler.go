@@ -11,5 +11,5 @@ func (srv* Server) indexHandler(w http.ResponseWriter, r *http.Request) {
         http.Redirect(w, r, "/static/login.html", http.StatusFound)
         return
     }
-    http.Redirect(w, r, "/user/", http.StatusFound)
+    http.Redirect(w, r, "/static/overview.html", http.StatusFound)
 }

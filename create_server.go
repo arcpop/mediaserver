@@ -22,8 +22,10 @@ func createMediaServer(server *http.Server, htmlpath, datapath string) (*Server,
     s.server.Handler = s.mux
     s.mux.HandleFunc("/", s.indexHandler)
     s.mux.Handle("/static/", checkNoDirectory(http.FileServer(http.Dir(htmlpath))))
-    s.mux.HandleFunc("/user/", s.checkSecure(s.userHandler))
-    s.mux.HandleFunc("/shared/", s.checkSecure(s.sharedHandler))
+    //s.mux.HandleFunc("/user/", s.checkSecure(s.userHandler))
+    //s.mux.HandleFunc("/shared/", s.checkSecure(s.sharedHandler))
     s.mux.HandleFunc("/login", s.loginHandler)
+    s.mux.Handle("/vod/", s.secureHandler(http.FileServer(http.Dir(s.datapath))))
+    s.mux.HandleFunc("/upload", s.checkSecure(s.uploadHandler))
     return s, nil
 }

@@ -22,7 +22,6 @@ function doLogin(params) {
     }
     var url = "/login?username=" + document.getElementById("inputEmail").value +
         "&password=" + document.getElementById("inputPassword").value;
-    alert(url);
     xmlHttp.open("GET", url, true);
     xmlHttp.send();
 }
